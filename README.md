@@ -1,20 +1,20 @@
 <!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
 - [BridgeFridge](#bridgefridge)
-   * [Background](#background)
-   * [The Four Code Repositories](#the-four-code-repositories)
-      + [bridgefridge-ts-submodule](#bridgefridge-ts-submodule)
-      + [bridgefridge-device](#bridgefridge-device)
-         - [Web App](#web-app)
-         - [Personal Device Mode](#personal-device-mode)
-         - [Club Device Mode](#club-device-mode)
-      + [bridgefridge-cloud](#bridgefridge-cloud)
-   * [Identities and Environments](#identities-and-environments)
-      + [Services, AWS subaccounts, and Stages/Environments](#services-aws-subaccounts-and-stagesenvironments)
-      + [AWS IAM Identity Center, SSO, and the CLI](#aws-iam-identity-center-sso-and-the-cli)
-      + [Expected env vars for your CLI](#expected-env-vars-for-your-cli)
-      + [bridgefridge-cloud and bridgefridge-device webapp deployments](#bridgefridge-cloud-and-bridgefridge-device-webapp-deployments)
-   * [This submodule should be an NPM package](#this-submodule-should-be-an-npm-package)
+  - [Background](#background)
+  - [The Four Code Repositories](#the-four-code-repositories)
+    - [bridgefridge-ts-submodule](#bridgefridge-ts-submodule)
+    - [bridgefridge-device](#bridgefridge-device)
+      - [Web App](#web-app)
+      - [Personal Device Mode](#personal-device-mode)
+      - [Club Device Mode](#club-device-mode)
+    - [bridgefridge-cloud](#bridgefridge-cloud)
+  - [Identities and Environments](#identities-and-environments)
+    - [Services, AWS subaccounts, and Stages/Environments](#services-aws-subaccounts-and-stagesenvironments)
+    - [AWS IAM Identity Center, SSO, and the CLI](#aws-iam-identity-center-sso-and-the-cli)
+    - [Expected env vars for your CLI](#expected-env-vars-for-your-cli)
+    - [bridgefridge-cloud and bridgefridge-device webapp deployments](#bridgefridge-cloud-and-bridgefridge-device-webapp-deployments)
+  - [This submodule should be an NPM package](#this-submodule-should-be-an-npm-package)
 
 <!-- TOC end -->
 
@@ -92,13 +92,15 @@ In this example profile and session, `sbc00` corresponds to the NPM serverless f
 
 #### Expected env vars for your CLI
 
-Once you have an AWS SSO profile set up, this project expects these env vars to be set:
+Once you have an AWS SSO profile set up, this project expects these env vars to be set (staging and prod are optional but shown for completeness):
 
 ```zsh
-export BF_STAGE_AWS_CLI_PROFILE=BridgeFridge-dev-tdh-PowerUser-profile
-export BF_DNS_AWS_CLI_PROFILE=BridgeFridge-prod-tdh-PowerUser-profile
-export STAGE=tdh
 export AWS_REGION=us-west-2
+export STAGE=tdh
+export BF_AWS_CLI_PROFILE_DEV=BridgeFridge-dev-tdh-PowerUser-profile
+export BF_AWS_CLI_PROFILE_DNS=BridgeFridge-prod-tdh-PowerUser-profile
+export BF_AWS_CLI_PROFILE_STAGING=BridgeFridge-staging-tdh-PowerUser-profile
+export BF_AWS_CLI_PROFILE_PROD=BridgeFridge-prod-tdh-PowerUser-profile
 ```
 
 This tells the build and test code in bridgefridge-cloud and bridgefridge-device which AWS SSO profile to use for the build, deploy, and test. Switching which AWS subaccount you are pointed at is done by switching this env var to a different AWS SSO profile (TODO: [SCOR-588](https://theilman.atlassian.net/browse/SCOR-588) there is a plan to redo this). Within that service/account which env you are pointed at is done by setting the `STAGE` env var to the name of that env. See the `package.json` file in bridgefridge-cloud for more information.
