@@ -212,10 +212,10 @@ export interface EnqueueCreateSessionOutput {
   __typename?: "EnqueueCreateSessionOutput";
   boardsPerRound: Scalars["Int"]["output"];
   clubId: Scalars["String"]["output"];
-  sessionId: Scalars["String"]["output"];
   label?: Maybe<Scalars["String"]["output"]>;
   movement: Movement;
   roundCount: Scalars["Int"]["output"];
+  sessionId: Scalars["String"]["output"];
   tableCount: Scalars["Int"]["output"];
 }
 
@@ -243,19 +243,6 @@ export interface EnqueueUpdateClubHumanOutput {
   clubId: Scalars["String"]["output"];
   displayName?: Maybe<Scalars["String"]["output"]>;
   humanId: Scalars["String"]["output"];
-}
-
-export interface Session {
-  __typename?: "Session";
-  boardsPerRound: Scalars["Int"]["output"];
-  clubId: Scalars["String"]["output"];
-  createdAt: Scalars["AWSDateTime"]["output"];
-  sessionId: Scalars["String"]["output"];
-  label?: Maybe<Scalars["String"]["output"]>;
-  movement: Movement;
-  roundCount: Scalars["Int"]["output"];
-  tableAssignments: TableAssignmentCvt[];
-  tableCount: Scalars["Int"]["output"];
 }
 
 export interface GetSessionInput {
@@ -475,14 +462,20 @@ export interface PagingTableAssignmentVt {
   tableNumber: Scalars["Int"]["input"];
 }
 
+export interface PartialPlayerAssignment {
+  clubHumanId: Scalars["String"]["input"];
+  directionLetter: DirectionLetter;
+  displayName: Scalars["String"]["input"];
+}
+
 export interface PartialSessionCvt {
   boardsPerRound: Scalars["Int"]["input"];
   clubId: Scalars["String"]["input"];
   createdAt: Scalars["AWSDateTime"]["input"];
-  sessionId: Scalars["String"]["input"];
   label?: InputMaybe<Scalars["String"]["input"]>;
   movement: Movement;
   roundCount: Scalars["Int"]["input"];
+  sessionId: Scalars["String"]["input"];
   tableAssignments: PagingTableAssignmentCvt[];
   tableCount: Scalars["Int"]["input"];
 }
@@ -491,18 +484,12 @@ export interface PartialSessionVt {
   boardsPerRound: Scalars["Int"]["input"];
   clubId: Scalars["String"]["input"];
   createdAt: Scalars["AWSDateTime"]["input"];
-  sessionId: Scalars["String"]["input"];
   label?: InputMaybe<Scalars["String"]["input"]>;
   movement: Movement;
   roundCount: Scalars["Int"]["input"];
+  sessionId: Scalars["String"]["input"];
   tableAssignments: PagingTableAssignmentVt[];
   tableCount: Scalars["Int"]["input"];
-}
-
-export interface PartialPlayerAssignment {
-  clubHumanId: Scalars["String"]["input"];
-  directionLetter: DirectionLetter;
-  displayName: Scalars["String"]["input"];
 }
 
 export interface PlayerAssignment {
@@ -560,6 +547,19 @@ export type Rank =
   | "TEN"
   | "THREE"
   | "TWO";
+
+export interface Session {
+  __typename?: "Session";
+  boardsPerRound: Scalars["Int"]["output"];
+  clubId: Scalars["String"]["output"];
+  createdAt: Scalars["AWSDateTime"]["output"];
+  label?: Maybe<Scalars["String"]["output"]>;
+  movement: Movement;
+  roundCount: Scalars["Int"]["output"];
+  sessionId: Scalars["String"]["output"];
+  tableAssignments: TableAssignmentCvt[];
+  tableCount: Scalars["Int"]["output"];
+}
 
 export type Strain = "C" | "D" | "H" | "NT" | "S";
 
