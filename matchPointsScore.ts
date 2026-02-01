@@ -1,6 +1,6 @@
 import { biddingBoxScoreForPartnershipRegardlessOfPlayed } from "./boardScore";
 import { allDirections, BoardResultUl } from "./bridgeEnums";
-import { DirectionLetter, Game, Movement } from "./graphql/appsync";
+import { DirectionLetter, Movement, Session } from "./graphql/appsync";
 import { movementMethods, whereWasI, withEachPlayer } from "./movementHelpers";
 import { tsSubmoduleLogFn } from "./tsSubmoduleLog";
 
@@ -186,13 +186,13 @@ export const matchPointsScore = (params: {
 const pointFooPct = (ratio: number) => Math.round(ratio * 1000) / 10;
 
 export const playerDirToMpScore = ({
-  game,
+  session,
   round,
   tableNumber,
   board,
   combinedCloudAndStagedBoardResults,
 }: {
-  game: Omit<Game, "tableAssignments">;
+  session: Omit<Session, "tableAssignments">;
   round: number;
   tableNumber: number;
   board: number;
@@ -203,15 +203,15 @@ export const playerDirToMpScore = ({
       Record<DirectionLetter, { myPct: number; opponentPcts: string[] } | null>
     >
   >((dirToComp, dir) => {
-    const playerNumber = movementMethods(game.movement).playerNumberMethod({
+    const playerNumber = movementMethods(session.movement).playerNumberMethod({
       direction: dir,
       round,
       table: tableNumber,
-      tableCount: game.tableCount,
+      tableCount: session.tableCount,
     });
-    const opponents = trueOpponents({ ...game, board, playerNumber });
+    const opponents = trueOpponents({ ...session, board, playerNumber });
     const myScore = matchPointsScore({
-      ...game,
+      ...session,
       playerNumber,
       board,
       boardResults: combinedCloudAndStagedBoardResults,
@@ -226,7 +226,7 @@ export const playerDirToMpScore = ({
         opponentPcts: opponents
           .reduce<number[]>((numAcc, opponentPlayerNumber) => {
             const opponentScore = matchPointsScore({
-              ...game,
+              ...session,
               playerNumber: opponentPlayerNumber,
               board,
               boardResults: combinedCloudAndStagedBoardResults,

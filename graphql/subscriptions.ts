@@ -2,16 +2,16 @@ import {
   Subscription,
   SubscriptionOnAssignPlayerArgs,
   SubscriptionOnDeleteClubHumanArgs,
-  SubscriptionOnDeleteGameArgs,
+  SubscriptionOnDeleteSessionArgs,
   SubscriptionOnNotifyCreateClubDeviceArgs,
   SubscriptionOnNotifyCreateClubHumanArgs,
-  SubscriptionOnNotifyCreateGameArgs,
+  SubscriptionOnNotifyCreateSessionArgs,
   SubscriptionOnNotifyDeleteClubDeviceArgs,
   SubscriptionOnNotifyUpdateClubHumanArgs,
   SubscriptionOnUnassignPlayersArgs,
   SubscriptionOnUpdateBoardResultArgs,
   SubscriptionOnUpdateClubNameArgs,
-  SubscriptionOnUpdateCurrentGameIdArgs,
+  SubscriptionOnUpdateCurrentSessionIdArgs,
   SubscriptionOnUpdateTableAssignmentArgs,
 } from "./appsync";
 
@@ -43,17 +43,17 @@ export const createKeyedGeneratedSubscription = <
   } as KeyedGeneratedSubscription<NAME, ARGS>;
 };
 export const subIdToSubGql = {
-  onNotifyCreateGame: createKeyedGeneratedSubscription<
-    "onNotifyCreateGame",
-    SubscriptionOnNotifyCreateGameArgs
+  onNotifyCreateSession: createKeyedGeneratedSubscription<
+    "onNotifyCreateSession",
+    SubscriptionOnNotifyCreateSessionArgs
   >(
     /* GraphQL */ `
-      subscription OnNotifyCreateGame($clubId: String!) {
-        onNotifyCreateGame(clubId: $clubId) {
+      subscription OnNotifyCreateSession($clubId: String!) {
+        onNotifyCreateSession(clubId: $clubId) {
           boardsPerRound
           clubId
           createdAt
-          gameId
+          sessionId
           label
           movement
           roundCount
@@ -88,34 +88,34 @@ export const subIdToSubGql = {
         }
       }
     `,
-    "onNotifyCreateGame",
+    "onNotifyCreateSession",
   ),
-  onDeleteGame: createKeyedGeneratedSubscription<
-    "onDeleteGame",
-    SubscriptionOnDeleteGameArgs
+  onDeleteSession: createKeyedGeneratedSubscription<
+    "onDeleteSession",
+    SubscriptionOnDeleteSessionArgs
   >(
     /* GraphQL */ `
-      subscription OnDeleteGame($clubId: String!) {
-        onDeleteGame(clubId: $clubId) {
-          gameId
+      subscription OnDeleteSession($clubId: String!) {
+        onDeleteSession(clubId: $clubId) {
+          sessionId
         }
       }
     `,
-    "onDeleteGame",
+    "onDeleteSession",
   ),
 
-  onUpdateCurrentGameId: createKeyedGeneratedSubscription<
-    "onUpdateCurrentGameId",
-    SubscriptionOnUpdateCurrentGameIdArgs
+  onUpdateCurrentSessionId: createKeyedGeneratedSubscription<
+    "onUpdateCurrentSessionId",
+    SubscriptionOnUpdateCurrentSessionIdArgs
   >(
     /* GraphQL */ `
-      subscription OnUpdateCurrentGameId($clubId: String!) {
-        onUpdateCurrentGameId(clubId: $clubId) {
-          newCurrentGameId
+      subscription OnUpdateCurrentSessionId($clubId: String!) {
+        onUpdateCurrentSessionId(clubId: $clubId) {
+          newCurrentSessionId
         }
       }
     `,
-    "onUpdateCurrentGameId",
+    "onUpdateCurrentSessionId",
   ),
 
   onUpdateClubName: createKeyedGeneratedSubscription<
@@ -140,7 +140,7 @@ export const subIdToSubGql = {
       subscription OnUpdateTableAssignment($clubId: String!) {
         onUpdateTableAssignment(clubId: $clubId) {
           clubId
-          gameId
+          sessionId
           clientId
           tableAssignment {
             tableNumber
@@ -182,7 +182,7 @@ export const subIdToSubGql = {
       subscription OnAssignPlayer($clubId: String!) {
         onAssignPlayer(clubId: $clubId) {
           clubId
-          gameId
+          sessionId
           clubDeviceId
           tableNumber
           directionLetter
@@ -201,7 +201,7 @@ export const subIdToSubGql = {
       subscription OnUnassignPlayers($clubId: String!) {
         onUnassignPlayers(clubId: $clubId) {
           clubId
-          gameId
+          sessionId
           clubDeviceId
           tableNumber
         }
@@ -218,7 +218,7 @@ export const subIdToSubGql = {
         onUpdateBoardResult(clubId: $clubId) {
           clubId
           tableNumber
-          gameId
+          sessionId
           boardResult {
             type
             board

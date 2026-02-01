@@ -4,15 +4,15 @@ import {
   MutationCreateClubDeviceRegistrationArgs,
   MutationDeleteClubAndAdminArgs,
   MutationDeleteClubHumanArgs,
-  MutationDeleteGameArgs,
+  MutationDeleteSessionArgs,
   MutationEnqueueCreateClubHumanArgs,
-  MutationEnqueueCreateGameArgs,
+  MutationEnqueueCreateSessionArgs,
   MutationEnqueueDeleteClubDeviceArgs,
   MutationEnqueueUpdateClubHumanArgs,
   MutationUnassignPlayersArgs,
   MutationUpdateBoardResultArgs,
   MutationUpdateClubNameArgs,
-  MutationUpdateCurrentGameIdArgs,
+  MutationUpdateCurrentSessionIdArgs,
   MutationUpdateTableAssignmentArgs,
 } from "./appsync";
 
@@ -62,19 +62,19 @@ export const mutIdToMutGql = {
     "updateClubName",
   ),
 
-  updateCurrentGameId: createKeyedGeneratedMutation<
-    "updateCurrentGameId",
-    MutationUpdateCurrentGameIdArgs
+  updateCurrentSessionId: createKeyedGeneratedMutation<
+    "updateCurrentSessionId",
+    MutationUpdateCurrentSessionIdArgs
   >(
     /* GraphQL */ `
-      mutation updateCurrentGameId($input: UpdateCurrentGameIdInput!) {
-        updateCurrentGameId(input: $input) {
+      mutation updateCurrentSessionId($input: UpdateCurrentSessionIdInput!) {
+        updateCurrentSessionId(input: $input) {
           clubId
-          newCurrentGameId
+          newCurrentSessionId
         }
       }
     `,
-    "updateCurrentGameId",
+    "updateCurrentSessionId",
   ),
   deleteClubAndAdmin: createKeyedGeneratedMutation<
     "deleteClubAndAdmin",
@@ -123,14 +123,14 @@ export const mutIdToMutGql = {
     `,
     "enqueueDeleteClubDevice",
   ),
-  enqueueCreateGame: createKeyedGeneratedMutation<
-    "enqueueCreateGame",
-    MutationEnqueueCreateGameArgs
+  enqueueCreateSession: createKeyedGeneratedMutation<
+    "enqueueCreateSession",
+    MutationEnqueueCreateSessionArgs
   >(
     /* GraphQL */ `
-      mutation enqueueCreateGame($input: EnqueueCreateGameInput!) {
-        enqueueCreateGame(input: $input) {
-          gameId
+      mutation enqueueCreateSession($input: EnqueueCreateSessionInput!) {
+        enqueueCreateSession(input: $input) {
+          sessionId
           boardsPerRound
           clubId
           label
@@ -140,17 +140,17 @@ export const mutIdToMutGql = {
         }
       }
     `,
-    "enqueueCreateGame",
+    "enqueueCreateSession",
   ),
-  deleteGame: createKeyedGeneratedMutation<
-    "deleteGame",
-    MutationDeleteGameArgs
+  deleteSession: createKeyedGeneratedMutation<
+    "deleteSession",
+    MutationDeleteSessionArgs
   >(
     /* GraphQL */ `
-      mutation deleteGame($input: DeleteGameInput!) {
-        deleteGame(input: $input) {
+      mutation deleteSession($input: DeleteSessionInput!) {
+        deleteSession(input: $input) {
           clubId
-          gameId
+          sessionId
           label
           movement
           tableCount
@@ -160,7 +160,7 @@ export const mutIdToMutGql = {
         }
       }
     `,
-    "deleteGame",
+    "deleteSession",
   ),
   enqueueCreateClubHuman: createKeyedGeneratedMutation<
     "enqueueCreateClubHuman",
@@ -218,7 +218,7 @@ export const mutIdToMutGql = {
       mutation updateTableAssignment($input: UpdateTableAssignmentInput!) {
         updateTableAssignment(input: $input) {
           clubId
-          gameId
+          sessionId
           clientId
           tableAssignment {
             tableNumber
@@ -261,7 +261,7 @@ export const mutIdToMutGql = {
         assignPlayer(input: $input) {
           clubId
           clubDeviceId
-          gameId
+          sessionId
           tableNumber
           directionLetter
           clubHumanId
@@ -280,7 +280,7 @@ export const mutIdToMutGql = {
         unassignPlayers(input: $input) {
           clubId
           clubDeviceId
-          gameId
+          sessionId
           tableNumber
         }
       }
@@ -296,7 +296,7 @@ export const mutIdToMutGql = {
         updateBoardResult(input: $input) {
           clubId
           tableNumber
-          gameId
+          sessionId
           boardResult {
             board
             round

@@ -5,7 +5,7 @@ import {
   ClubHuman,
   DirectionLetter,
   Doubling,
-  Game,
+  Session,
   PlayerAssignment,
   Rank,
   Strain,
@@ -199,7 +199,10 @@ export type TableAssignmentUcv = Omit<TableAssignment, "tableNumber"> &
   TableAssignmentVectors;
 
 // lambda does not apply currentAsOf; response mapping template does:
-export type CreateGameLambdaReturnType = Omit<Game, "tableAssignments"> & {
+export type CreateSessionLambdaReturnType = Omit<
+  Session,
+  "tableAssignments"
+> & {
   tableAssignments: (Omit<TableAssignmentVt, "results"> & {
     results: (BoardAndRound & {
       type: "NOT_BID_NOT_PLAYED";
@@ -237,4 +240,4 @@ export interface CreateClubResponse {
   clubId: string;
 }
 
-export const anyGameItemLifetimeSeconds = 60 * 60 * 24 * 30; // 30 days
+export const anySessionItemLifetimeSeconds = 60 * 60 * 24 * 30; // 30 days

@@ -1,13 +1,13 @@
-import { MutationEnqueueCreateGameArgs } from "../appsync";
+import { MutationEnqueueCreateSessionArgs } from "../appsync";
 import { errorForClubLevelMultitenancy, InputValidator } from "./multitenancy";
 
-export const errorForMutationEnqueueCreateGame: InputValidator<
-  MutationEnqueueCreateGameArgs
+export const errorForMutationEnqueueCreateSession: InputValidator<
+  MutationEnqueueCreateSessionArgs
 > = ({ args, cogIdentity }) => {
   const multitenancyError = errorForClubLevelMultitenancy({
     cogIdentity,
     clubId: args.input.clubId,
-    failureMessage: "Can only create games for one's own club.",
+    failureMessage: "Can only create sessions for one's own club.",
   });
   if (multitenancyError) {
     return multitenancyError;
@@ -17,8 +17,8 @@ export const errorForMutationEnqueueCreateGame: InputValidator<
   // TODO: ensure they are integers too!
   if (boardsPerRound < 1 || roundCount < 1 || tableCount < 1) {
     return {
-      msg: "Invalid game parameters: boardsPerRound, roundCount, and tableCount must be positive integers",
-      errorType: "400: Invalid game parameters",
+      msg: "Invalid session parameters: boardsPerRound, roundCount, and tableCount must be positive integers",
+      errorType: "400: Invalid session parameters",
     };
   }
   return;

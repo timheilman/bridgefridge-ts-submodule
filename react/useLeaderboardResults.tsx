@@ -1,5 +1,5 @@
 import { BoardResultUl } from "../bridgeEnums";
-import { DirectionLetter, Game } from "../graphql/appsync";
+import { DirectionLetter, Session } from "../graphql/appsync";
 import { BoardAllRoundsScore, matchPointsScore } from "../matchPointsScore";
 import {
   inversePlayerNumber,
@@ -56,18 +56,18 @@ const roleForPlayerOnBoard = ({
   playerNumber,
   board,
   boardResults,
-  game,
+  session,
 }: {
   playerNumber: number;
   board: number;
   // key is "<tableNumber>_<board>_<round>"
   boardResults: Record<string, BoardResultUl>;
-  game: Omit<Game, "tableAssignments">;
+  session: Omit<Session, "tableAssignments">;
 }): "Declarer" | "Defender" | "Dummy" | undefined => {
   const whereIWas = whereWasI({
     playerNumber,
     board,
-    ...game,
+    ...session,
   });
   if (!whereIWas) {
     throw new Error("expected to find where I was");
@@ -94,14 +94,14 @@ const roleForPlayerOnBoard = ({
   return "Defender";
 };
 const getPlayerNumberToBoardAllRoundsScoreList = ({
-  game,
+  session,
   boardResults,
 }: {
-  game: Omit<Game, "tableAssignments">;
+  session: Omit<Session, "tableAssignments">;
   // key is "<tableNumber>_<board>_<round>"
   boardResults: Record<string, BoardResultUl>;
 }) => {
-  return withEachPlayer(game).reduce<
+  return withEachPlayer(session).reduce<
     Record<
       number,
       | {
@@ -112,10 +112,10 @@ const getPlayerNumberToBoardAllRoundsScoreList = ({
       | undefined
     >
   >((playerAcc, playerNumber) => {
-    playerAcc[playerNumber] = withEachBoard(game).reduce(
+    playerAcc[playerNumber] = withEachBoard(session).reduce(
       (acc, board) => {
         const thisBoardScore = matchPointsScore({
-          ...game,
+          ...session,
           playerNumber,
           board,
           boardResults,
@@ -126,7 +126,7 @@ const getPlayerNumberToBoardAllRoundsScoreList = ({
             playerNumber,
             board,
             boardResults,
-            game,
+            session,
           });
           if (role === "Defender") {
             acc.individual.push(thisBoardScore);
@@ -149,24 +149,24 @@ const getPlayerNumberToBoardAllRoundsScoreList = ({
 const pctThreeSigDig = (n: number) => Math.round(n * 1000) / 10;
 
 export const useLeaderboardResults = ({
-  game,
+  session,
   boardResultsLoaded,
   boardResults,
 }: {
-  game: Omit<Game, "tableAssignments"> | undefined;
+  session: Omit<Session, "tableAssignments"> | undefined;
   boardResultsLoaded: boolean;
   // key is "<tableNumber>_<board>_<round>"
   boardResults: Record<string, BoardResultUl>;
 }) => {
   log("useLeaderboardResults", "debug", { boardResultsLoaded, boardResults });
-  if (!game || !boardResultsLoaded) {
+  if (!session || !boardResultsLoaded) {
     return;
   }
-  const tableCount = game.tableCount;
+  const tableCount = session.tableCount;
 
   const playerNumberToBoardAllRoundsScoreList =
     getPlayerNumberToBoardAllRoundsScoreList({
-      game,
+      session,
       boardResults,
     });
   const playerNumberToAllBoardsScorePct = Object.keys(
@@ -227,7 +227,7 @@ export const useLeaderboardResults = ({
     return Object.fromEntries(
       Object.entries(playerNumberToAllBoardsScorePct).filter((e) => {
         const { direction } = inversePlayerNumber({
-          ...game,
+          ...session,
           playerNumber: +e[0],
         });
         if (direction === dir1 || direction === dir2) {

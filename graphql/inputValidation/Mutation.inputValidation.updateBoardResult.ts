@@ -24,7 +24,7 @@ export const errorForMutationUpdateBoardResult: InputValidator<
   } = boardResult;
   // this is somewhat superfluous; to make it airtight would require a 2-stage
   // pipeline to verify that the clubDeviceId provided is the one present in the
-  // table assignment for this table number; gameId similarly
+  // table assignment for this table number; sessionId similarly
   // so, passing restrictClubDeviceIdWhenNonAdmin: false for now; it should actually
   // be true and the allowedClubDeviceId value passed from the table assignment record
   const deviceLevelMultitenancyError = errorForDeviceLevelMultitenancy({

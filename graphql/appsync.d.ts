@@ -42,7 +42,7 @@ export interface AssignPlayerInput {
   clubId: Scalars["String"]["input"];
   directionLetter: DirectionLetter;
   displayName: Scalars["String"]["input"];
-  gameId: Scalars["String"]["input"];
+  sessionId: Scalars["String"]["input"];
   tableNumber: Scalars["Int"]["input"];
 }
 
@@ -53,7 +53,7 @@ export interface AssignPlayerResponse {
   clubId: Scalars["String"]["output"];
   directionLetter: DirectionLetter;
   displayName: Scalars["String"]["output"];
-  gameId: Scalars["String"]["output"];
+  sessionId: Scalars["String"]["output"];
   tableNumber: Scalars["Int"]["output"];
 }
 
@@ -89,15 +89,15 @@ export interface BoardResultC {
 
 export type BoardResultType = "NOT_BID_NOT_PLAYED" | "PASSED_OUT" | "PLAYED";
 
-export interface ClearCurrentGameIdResponse {
-  __typename?: "ClearCurrentGameIdResponse";
+export interface ClearCurrentSessionIdResponse {
+  __typename?: "ClearCurrentSessionIdResponse";
   clubId: Scalars["String"]["output"];
 }
 
 export interface Club {
   __typename?: "Club";
   createdAt: Scalars["AWSDateTime"]["output"];
-  currentGameId?: Maybe<Scalars["String"]["output"]>;
+  currentSessionId?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["String"]["output"];
   name: Scalars["String"]["output"];
 }
@@ -176,9 +176,9 @@ export interface DeleteClubHumanInput {
   humanId: Scalars["String"]["input"];
 }
 
-export interface DeleteGameInput {
+export interface DeleteSessionInput {
   clubId: Scalars["String"]["input"];
-  gameId: Scalars["String"]["input"];
+  sessionId: Scalars["String"]["input"];
 }
 
 export type DirectionLetter = "E" | "N" | "S" | "W";
@@ -199,7 +199,7 @@ export interface EnqueueCreateClubHumanOutput {
   humanId: Scalars["String"]["output"];
 }
 
-export interface EnqueueCreateGameInput {
+export interface EnqueueCreateSessionInput {
   boardsPerRound: Scalars["Int"]["input"];
   clubId: Scalars["String"]["input"];
   label?: InputMaybe<Scalars["String"]["input"]>;
@@ -208,11 +208,11 @@ export interface EnqueueCreateGameInput {
   tableCount: Scalars["Int"]["input"];
 }
 
-export interface EnqueueCreateGameOutput {
-  __typename?: "EnqueueCreateGameOutput";
+export interface EnqueueCreateSessionOutput {
+  __typename?: "EnqueueCreateSessionOutput";
   boardsPerRound: Scalars["Int"]["output"];
   clubId: Scalars["String"]["output"];
-  gameId: Scalars["String"]["output"];
+  sessionId: Scalars["String"]["output"];
   label?: Maybe<Scalars["String"]["output"]>;
   movement: Movement;
   roundCount: Scalars["Int"]["output"];
@@ -245,12 +245,12 @@ export interface EnqueueUpdateClubHumanOutput {
   humanId: Scalars["String"]["output"];
 }
 
-export interface Game {
-  __typename?: "Game";
+export interface Session {
+  __typename?: "Session";
   boardsPerRound: Scalars["Int"]["output"];
   clubId: Scalars["String"]["output"];
   createdAt: Scalars["AWSDateTime"]["output"];
-  gameId: Scalars["String"]["output"];
+  sessionId: Scalars["String"]["output"];
   label?: Maybe<Scalars["String"]["output"]>;
   movement: Movement;
   roundCount: Scalars["Int"]["output"];
@@ -258,9 +258,9 @@ export interface Game {
   tableCount: Scalars["Int"]["output"];
 }
 
-export interface GetGameInput {
+export interface GetSessionInput {
   clubId: Scalars["String"]["input"];
-  gameId: Scalars["String"]["input"];
+  sessionId: Scalars["String"]["input"];
 }
 
 export interface ListClubDeviceRegistrationsInput {
@@ -299,16 +299,16 @@ export interface ListClubHumansOutput {
   nextToken?: Maybe<Scalars["String"]["output"]>;
 }
 
-export interface ListGamesInput {
+export interface ListSessionsInput {
   clubId: Scalars["String"]["input"];
-  finalGameFromLastList?: InputMaybe<PartialGameCvt>;
+  finalSessionFromLastList?: InputMaybe<PartialSessionCvt>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
   nextToken?: InputMaybe<Scalars["String"]["input"]>;
 }
 
-export interface ListGamesOutput {
-  __typename?: "ListGamesOutput";
-  items: Maybe<Game>[];
+export interface ListSessionsOutput {
+  __typename?: "ListSessionsOutput";
+  items: Maybe<Session>[];
   nextToken?: Maybe<Scalars["String"]["output"]>;
 }
 
@@ -320,21 +320,21 @@ export interface Mutation {
   createClubDeviceRegistration: ClubDeviceRegistration;
   deleteClubAndAdmin: DeleteClubAndAdminResponse;
   deleteClubHuman: ClubHuman;
-  deleteGame: Game;
+  deleteSession: Session;
   enqueueCreateClubHuman: EnqueueCreateClubHumanOutput;
-  enqueueCreateGame: EnqueueCreateGameOutput;
+  enqueueCreateSession: EnqueueCreateSessionOutput;
   enqueueDeleteClubDevice: ClubDevice;
   enqueueUpdateClubHuman: EnqueueUpdateClubHumanOutput;
   notifyCreateClubDevice: ClubDeviceWithRegToken;
   notifyCreateClubHuman: NotifyClubHuman;
-  notifyCreateGame: Game;
+  notifyCreateSession: Session;
   notifyDeleteClubDevice: EnqueueDeleteClubDeviceOutput;
   notifyUpdateClubHuman: NotifyClubHuman;
   unassignPlayers: UnassignPlayersResponse;
   unexpectedError: UnexpectedErrorResponse;
   updateBoardResult: UpdateBoardResultResponse;
   updateClubName: UpdateClubNameResponse;
-  updateCurrentGameId: UpdateCurrentGameIdResponse;
+  updateCurrentSessionId: UpdateCurrentSessionIdResponse;
   updateTableAssignment: UpdateTableAssignmentResponse;
 }
 
@@ -354,16 +354,16 @@ export interface MutationDeleteClubHumanArgs {
   input: DeleteClubHumanInput;
 }
 
-export interface MutationDeleteGameArgs {
-  input: DeleteGameInput;
+export interface MutationDeleteSessionArgs {
+  input: DeleteSessionInput;
 }
 
 export interface MutationEnqueueCreateClubHumanArgs {
   input: EnqueueCreateClubHumanInput;
 }
 
-export interface MutationEnqueueCreateGameArgs {
-  input: EnqueueCreateGameInput;
+export interface MutationEnqueueCreateSessionArgs {
+  input: EnqueueCreateSessionInput;
 }
 
 export interface MutationEnqueueDeleteClubDeviceArgs {
@@ -382,8 +382,8 @@ export interface MutationNotifyCreateClubHumanArgs {
   input: NotifyClubHumanInput;
 }
 
-export interface MutationNotifyCreateGameArgs {
-  input: PartialGameVt;
+export interface MutationNotifyCreateSessionArgs {
+  input: PartialSessionVt;
 }
 
 export interface MutationNotifyDeleteClubDeviceArgs {
@@ -406,8 +406,8 @@ export interface MutationUpdateClubNameArgs {
   input: UpdateClubNameInput;
 }
 
-export interface MutationUpdateCurrentGameIdArgs {
-  input: UpdateCurrentGameIdInput;
+export interface MutationUpdateCurrentSessionIdArgs {
+  input: UpdateCurrentSessionIdInput;
 }
 
 export interface MutationUpdateTableAssignmentArgs {
@@ -475,11 +475,11 @@ export interface PagingTableAssignmentVt {
   tableNumber: Scalars["Int"]["input"];
 }
 
-export interface PartialGameCvt {
+export interface PartialSessionCvt {
   boardsPerRound: Scalars["Int"]["input"];
   clubId: Scalars["String"]["input"];
   createdAt: Scalars["AWSDateTime"]["input"];
-  gameId: Scalars["String"]["input"];
+  sessionId: Scalars["String"]["input"];
   label?: InputMaybe<Scalars["String"]["input"]>;
   movement: Movement;
   roundCount: Scalars["Int"]["input"];
@@ -487,11 +487,11 @@ export interface PartialGameCvt {
   tableCount: Scalars["Int"]["input"];
 }
 
-export interface PartialGameVt {
+export interface PartialSessionVt {
   boardsPerRound: Scalars["Int"]["input"];
   clubId: Scalars["String"]["input"];
   createdAt: Scalars["AWSDateTime"]["input"];
-  gameId: Scalars["String"]["input"];
+  sessionId: Scalars["String"]["input"];
   label?: InputMaybe<Scalars["String"]["input"]>;
   movement: Movement;
   roundCount: Scalars["Int"]["input"];
@@ -515,19 +515,19 @@ export interface PlayerAssignment {
 export interface Query {
   __typename?: "Query";
   getClub?: Maybe<Club>;
-  getGame?: Maybe<Game>;
+  getSession?: Maybe<Session>;
   listClubDeviceRegistrations: ListClubDeviceRegistrationsOutput;
   listClubDevices: ListClubDevicesOutput;
   listClubHumans: ListClubHumansOutput;
-  listGames: ListGamesOutput;
+  listSessions: ListSessionsOutput;
 }
 
 export interface QueryGetClubArgs {
   clubId: Scalars["String"]["input"];
 }
 
-export interface QueryGetGameArgs {
-  input: GetGameInput;
+export interface QueryGetSessionArgs {
+  input: GetSessionInput;
 }
 
 export interface QueryListClubDeviceRegistrationsArgs {
@@ -542,8 +542,8 @@ export interface QueryListClubHumansArgs {
   input: ListClubHumansInput;
 }
 
-export interface QueryListGamesArgs {
-  input: ListGamesInput;
+export interface QueryListSessionsArgs {
+  input: ListSessionsInput;
 }
 
 export type Rank =
@@ -567,16 +567,16 @@ export interface Subscription {
   __typename?: "Subscription";
   onAssignPlayer?: Maybe<AssignPlayerResponse>;
   onDeleteClubHuman?: Maybe<ClubHuman>;
-  onDeleteGame?: Maybe<Game>;
+  onDeleteSession?: Maybe<Session>;
   onNotifyCreateClubDevice?: Maybe<ClubDeviceWithRegToken>;
   onNotifyCreateClubHuman?: Maybe<NotifyClubHuman>;
-  onNotifyCreateGame?: Maybe<Game>;
+  onNotifyCreateSession?: Maybe<Session>;
   onNotifyDeleteClubDevice?: Maybe<EnqueueDeleteClubDeviceOutput>;
   onNotifyUpdateClubHuman?: Maybe<NotifyClubHuman>;
   onUnassignPlayers?: Maybe<UnassignPlayersResponse>;
   onUpdateBoardResult?: Maybe<UpdateBoardResultResponse>;
   onUpdateClubName?: Maybe<UpdateClubNameResponse>;
-  onUpdateCurrentGameId?: Maybe<UpdateCurrentGameIdResponse>;
+  onUpdateCurrentSessionId?: Maybe<UpdateCurrentSessionIdResponse>;
   onUpdateTableAssignment?: Maybe<UpdateTableAssignmentResponse>;
 }
 
@@ -588,7 +588,7 @@ export interface SubscriptionOnDeleteClubHumanArgs {
   clubId: Scalars["String"]["input"];
 }
 
-export interface SubscriptionOnDeleteGameArgs {
+export interface SubscriptionOnDeleteSessionArgs {
   clubId: Scalars["String"]["input"];
 }
 
@@ -600,7 +600,7 @@ export interface SubscriptionOnNotifyCreateClubHumanArgs {
   clubId: Scalars["String"]["input"];
 }
 
-export interface SubscriptionOnNotifyCreateGameArgs {
+export interface SubscriptionOnNotifyCreateSessionArgs {
   clubId: Scalars["String"]["input"];
 }
 
@@ -624,7 +624,7 @@ export interface SubscriptionOnUpdateClubNameArgs {
   clubId: Scalars["String"]["input"];
 }
 
-export interface SubscriptionOnUpdateCurrentGameIdArgs {
+export interface SubscriptionOnUpdateCurrentSessionIdArgs {
   clubId: Scalars["String"]["input"];
 }
 
@@ -658,7 +658,7 @@ export interface TableAssignmentCvt {
 export interface UnassignPlayersInput {
   clubDeviceId?: InputMaybe<Scalars["String"]["input"]>;
   clubId: Scalars["String"]["input"];
-  gameId: Scalars["String"]["input"];
+  sessionId: Scalars["String"]["input"];
   tableNumber: Scalars["Int"]["input"];
 }
 
@@ -666,7 +666,7 @@ export interface UnassignPlayersResponse {
   __typename?: "UnassignPlayersResponse";
   clubDeviceId?: Maybe<Scalars["String"]["output"]>;
   clubId: Scalars["String"]["output"];
-  gameId: Scalars["String"]["output"];
+  sessionId: Scalars["String"]["output"];
   tableNumber: Scalars["Int"]["output"];
 }
 
@@ -678,7 +678,7 @@ export interface UnexpectedErrorResponse {
 export interface UpdateBoardResultInput {
   boardResult: BoardResult;
   clubId: Scalars["String"]["input"];
-  gameId: Scalars["String"]["input"];
+  sessionId: Scalars["String"]["input"];
   tableNumber: Scalars["Int"]["input"];
 }
 
@@ -687,7 +687,7 @@ export interface UpdateBoardResultResponse {
   boardResult: BoardResultC;
   clientId: Scalars["String"]["output"];
   clubId: Scalars["String"]["output"];
-  gameId: Scalars["String"]["output"];
+  sessionId: Scalars["String"]["output"];
   tableNumber: Scalars["Int"]["output"];
 }
 
@@ -702,20 +702,20 @@ export interface UpdateClubNameResponse {
   newClubName: Scalars["String"]["output"];
 }
 
-export interface UpdateCurrentGameIdInput {
+export interface UpdateCurrentSessionIdInput {
   clubId: Scalars["String"]["input"];
-  newGameId?: InputMaybe<Scalars["String"]["input"]>;
+  newSessionId?: InputMaybe<Scalars["String"]["input"]>;
 }
 
-export interface UpdateCurrentGameIdResponse {
-  __typename?: "UpdateCurrentGameIdResponse";
+export interface UpdateCurrentSessionIdResponse {
+  __typename?: "UpdateCurrentSessionIdResponse";
   clubId: Scalars["String"]["output"];
-  newCurrentGameId?: Maybe<Scalars["String"]["output"]>;
+  newCurrentSessionId?: Maybe<Scalars["String"]["output"]>;
 }
 
 export interface UpdateTableAssignmentInput {
   clubId: Scalars["String"]["input"];
-  gameId: Scalars["String"]["input"];
+  sessionId: Scalars["String"]["input"];
   tableAssignment: TableAssignment;
 }
 
@@ -723,6 +723,6 @@ export interface UpdateTableAssignmentResponse {
   __typename?: "UpdateTableAssignmentResponse";
   clientId: Scalars["String"]["output"];
   clubId: Scalars["String"]["output"];
-  gameId: Scalars["String"]["output"];
+  sessionId: Scalars["String"]["output"];
   tableAssignment: TableAssignmentCvt;
 }

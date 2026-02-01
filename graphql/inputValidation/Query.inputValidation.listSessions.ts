@@ -1,11 +1,11 @@
-import { MutationDeleteGameArgs } from "../appsync";
+import { QueryListSessionsArgs } from "../appsync";
 import { errorForClubLevelMultitenancy, InputValidator } from "./multitenancy";
 
-export const errorForMutationDeleteGame: InputValidator<
-  MutationDeleteGameArgs
+export const errorForQueryListSessions: InputValidator<
+  QueryListSessionsArgs
 > = ({ args, cogIdentity }) =>
   errorForClubLevelMultitenancy({
     cogIdentity,
     clubId: args.input.clubId,
-    failureMessage: "Can only delete games for one's own club.",
+    failureMessage: "Can only list one's own club's sessions",
   });

@@ -4,7 +4,7 @@ import { DirectionLetter } from "./graphql/appsync";
 // CLUB, below:
 export const clubSortKeyPrefix0 = "CLUB";
 export const clubDeviceSortKeyPrefix0 = "CDEV";
-export const gameSortKeyPrefix0 = "GAME";
+export const sessionSortKeyPrefix0 = "SESSION";
 // shares slot with PlayerAssignment.directionLetter, so must not be N, S, E, or W:
 export const resultSortKeyPrefix3 = "BDRT";
 // CLUBHUMAN, below:
@@ -135,7 +135,7 @@ export const cognitoUserIdFromKey = (cognitoUserIdKey: string) => {
 // ----------
 // clubId (primary key)
 // name
-// mostly as FK target for 1:M hierarchy stuff not modeled here: game, playerAssignment, etc.
+// mostly as FK target for 1:M hierarchy stuff not modeled here: session, playerAssignment, etc.
 
 // now, applying the above to the learnings of adjacency lists, here:
 // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-adjacency-graphs.html
@@ -326,7 +326,7 @@ export const clubDeviceIdFromSortKey = (sortKey: string) => {
     };
   }
   const theSplit = sortKey.split("#");
-  // G, gameId, tableNumber, direction
+  // G, sessionId, tableNumber, direction
   if (theSplit.length < 2) {
     return {
       error: `Not a correct sortKey; ${sortKey} has no hashes.`,
@@ -339,14 +339,14 @@ export const clubDeviceIdFromSortKey = (sortKey: string) => {
 export const directionLetterFromSortKey = (
   sortKey: string,
 ): { error: string; result: DirectionLetter } => {
-  if (!sortKey.startsWith(gameSortKeyPrefix0)) {
+  if (!sortKey.startsWith(sessionSortKeyPrefix0)) {
     return {
-      error: `Not a correct sortKey; ${sortKey} did not start with ${gameSortKeyPrefix0}`,
+      error: `Not a correct sortKey; ${sortKey} did not start with ${sessionSortKeyPrefix0}`,
       result: "N" as const,
     };
   }
   const theSplit = sortKey.split("#");
-  // G, gameId, tableNumber, direction
+  // G, sessionId, tableNumber, direction
   if (theSplit.length < 4) {
     return {
       error: `Not a correct sortKey; ${sortKey} has under three hashes.`,
@@ -366,15 +366,15 @@ export const directionLetterFromSortKey = (
   };
 };
 
-export const gameIdFromSortKey = (sortKey: string) => {
-  if (!sortKey.startsWith(gameSortKeyPrefix0)) {
+export const sessionIdFromSortKey = (sortKey: string) => {
+  if (!sortKey.startsWith(sessionSortKeyPrefix0)) {
     return {
       result: "",
-      error: `Not a correct sortKey; ${sortKey} did not start with ${gameSortKeyPrefix0}`,
+      error: `Not a correct sortKey; ${sortKey} did not start with ${sessionSortKeyPrefix0}`,
     };
   }
   const theSplit = sortKey.split("#");
-  // G, gameId
+  // G, sessionId
   if (theSplit.length < 2) {
     return {
       result: "",
@@ -404,14 +404,14 @@ export const clubHumanIdFromSortKey = (sortKey: string) => {
 };
 
 export const tableNumberFromSortKey = (sortKey: string) => {
-  if (!sortKey.startsWith(gameSortKeyPrefix0)) {
+  if (!sortKey.startsWith(sessionSortKeyPrefix0)) {
     return {
       result: 0,
-      error: `Not a correct sortKey; ${sortKey} did not start with ${gameSortKeyPrefix0}`,
+      error: `Not a correct sortKey; ${sortKey} did not start with ${sessionSortKeyPrefix0}`,
     };
   }
   const theSplit = sortKey.split("#");
-  // G, gameId, tableNumber
+  // G, sessionId, tableNumber
   if (theSplit.length < 3) {
     return {
       result: 0,
@@ -422,14 +422,14 @@ export const tableNumberFromSortKey = (sortKey: string) => {
 };
 
 export const boardFromSortKey = (sortKey: string) => {
-  if (!sortKey.startsWith(gameSortKeyPrefix0)) {
+  if (!sortKey.startsWith(sessionSortKeyPrefix0)) {
     return {
-      error: `Not a correct sortKey; ${sortKey} did not start with ${gameSortKeyPrefix0}`,
+      error: `Not a correct sortKey; ${sortKey} did not start with ${sessionSortKeyPrefix0}`,
       result: 0,
     };
   }
   const theSplit = sortKey.split("#");
-  // G, gameId, tableNumber, R, boardNumber
+  // G, sessionId, tableNumber, R, boardNumber
   if (theSplit.length < 5) {
     return {
       error: `Not a correct sortKey; ${sortKey} has under four hashes.`,
@@ -449,14 +449,14 @@ export const boardFromSortKey = (sortKey: string) => {
 };
 
 export const roundFromSortKey = (sortKey: string) => {
-  if (!sortKey.startsWith(gameSortKeyPrefix0)) {
+  if (!sortKey.startsWith(sessionSortKeyPrefix0)) {
     return {
-      error: `Not a correct sortKey; ${sortKey} did not start with ${gameSortKeyPrefix0}`,
+      error: `Not a correct sortKey; ${sortKey} did not start with ${sessionSortKeyPrefix0}`,
       result: 0,
     };
   }
   const theSplit = sortKey.split("#");
-  // G, gameId, tableNumber, R, boardNumber, roundNumber
+  // G, sessionId, tableNumber, R, boardNumber, roundNumber
   if (theSplit.length < 6) {
     return {
       error: `Not a correct sortKey; ${sortKey} has under five hashes.`,
@@ -475,22 +475,22 @@ export const roundFromSortKey = (sortKey: string) => {
   };
 };
 
-export const gameItemSortKeyRegExStr = `^${gameSortKeyPrefix0}#[^#]+$`;
+export const sessionItemSortKeyRegExStr = `^${sessionSortKeyPrefix0}#[^#]+$`;
 
 export const tableAssignmentItemSortKeyRegExStr = ({
-  gameId = "[^#]+",
+  sessionId = "[^#]+",
 }: {
-  gameId?: string;
+  sessionId?: string;
 }) => {
-  return `^${gameSortKeyPrefix0}#${gameId}#\\d+$`;
+  return `^${sessionSortKeyPrefix0}#${sessionId}#\\d+$`;
 };
 
 export const boardResultItemSortKeyRegExStr = ({
-  gameId = "[^#]+",
+  sessionId = "[^#]+",
   tableNumber = "[0-9]+",
 }: {
-  gameId?: string;
+  sessionId?: string;
   tableNumber?: number | string;
 }) => {
-  return `^${gameSortKeyPrefix0}#${gameId}#${tableNumber}#${resultSortKeyPrefix3}#[^#]+#[^#]+$`;
+  return `^${sessionSortKeyPrefix0}#${sessionId}#${tableNumber}#${resultSortKeyPrefix3}#[^#]+#[^#]+$`;
 };

@@ -75,10 +75,10 @@ type Query {
   listClubDevices(input: ListClubDevicesInput!): ListClubDevicesOutput!
     @aws_cognito_user_pools(cognito_groups: ["rando", "adminSuper"])
 
-  listGames(input: ListGamesInput!): ListGamesOutput!
+  listSessions(input: ListSessionsInput!): ListSessionsOutput!
     @aws_cognito_user_pools(cognito_groups: ["rando", "adminSuper"])
 
-  getGame(input: GetGameInput!): Game
+  getSession(input: GetSessionInput!): Session
     @aws_cognito_user_pools(
       cognito_groups: ["rando", "adminSuper", "clubDevice"]
     )
@@ -98,9 +98,9 @@ type Mutation {
   #   @aws_cognito_user_pools(cognito_groups: ["adminSuper", "rando"])
   updateClubName(input: UpdateClubNameInput!): UpdateClubNameResponse!
     @aws_cognito_user_pools(cognito_groups: ["adminSuper", "rando"])
-  updateCurrentGameId(
-    input: UpdateCurrentGameIdInput!
-  ): UpdateCurrentGameIdResponse!
+  updateCurrentSessionId(
+    input: UpdateCurrentSessionIdInput!
+  ): UpdateCurrentSessionIdResponse!
     @aws_cognito_user_pools(cognito_groups: ["adminSuper", "rando"])
   deleteClubAndAdmin(
     input: DeleteClubAndAdminInput!
@@ -122,12 +122,14 @@ type Mutation {
     @aws_cognito_user_pools(cognito_groups: ["adminSuper"])
     @aws_iam
 
-  enqueueCreateGame(input: EnqueueCreateGameInput!): EnqueueCreateGameOutput!
+  enqueueCreateSession(
+    input: EnqueueCreateSessionInput!
+  ): EnqueueCreateSessionOutput!
     @aws_cognito_user_pools(cognito_groups: ["rando", "adminSuper"])
-  notifyCreateGame(input: PartialGameVT!): Game!
+  notifyCreateSession(input: PartialSessionVT!): Session!
     @aws_cognito_user_pools(cognito_groups: ["adminSuper"])
     @aws_iam
-  deleteGame(input: DeleteGameInput!): Game!
+  deleteSession(input: DeleteSessionInput!): Session!
     @aws_cognito_user_pools(cognito_groups: ["rando", "adminSuper"])
 
   updateTableAssignment(
@@ -171,11 +173,11 @@ type Mutation {
 }
 
 type Subscription {
-  onDeleteGame(clubId: String!): Game
-    @aws_subscribe(mutations: ["deleteGame"])
+  onDeleteSession(clubId: String!): Session
+    @aws_subscribe(mutations: ["deleteSession"])
     @aws_cognito_user_pools(cognito_groups: ["adminSuper", "clubDevice"])
-  onUpdateCurrentGameId(clubId: String!): UpdateCurrentGameIdResponse
-    @aws_subscribe(mutations: ["updateCurrentGameId"])
+  onUpdateCurrentSessionId(clubId: String!): UpdateCurrentSessionIdResponse
+    @aws_subscribe(mutations: ["updateCurrentSessionId"])
     @aws_cognito_user_pools(cognito_groups: ["adminSuper", "clubDevice"])
 
   # This is for personalDevice-to-clubDevice communication to update the club's name
@@ -228,8 +230,8 @@ type Subscription {
   onNotifyDeleteClubDevice(clubId: String!): EnqueueDeleteClubDeviceOutput
     @aws_subscribe(mutations: ["notifyDeleteClubDevice"])
     @aws_cognito_user_pools(cognito_groups: ["adminSuper", "rando"])
-  onNotifyCreateGame(clubId: String!): Game
-    @aws_subscribe(mutations: ["notifyCreateGame"])
+  onNotifyCreateSession(clubId: String!): Session
+    @aws_subscribe(mutations: ["notifyCreateSession"])
     @aws_cognito_user_pools(
       cognito_groups: ["adminSuper", "rando", "clubDevice"]
     )
@@ -260,11 +262,11 @@ type ListClubDeviceRegistrationsOutput {
   nextToken: String
 }
 
-input ListGamesInput {
+input ListSessionsInput {
   clubId: String!
   nextToken: String
   limit: Int
-  finalGameFromLastList: PartialGameCVT
+  finalSessionFromLastList: PartialSessionCVT
 }
 
 input ListClubHumansInput {
@@ -273,8 +275,8 @@ input ListClubHumansInput {
   limit: Int
 }
 
-type ListGamesOutput {
-  items: [Game]!
+type ListSessionsOutput {
+  items: [Session]!
   nextToken: String
 }
 
@@ -286,7 +288,7 @@ type ListClubHumansOutput {
 type Club {
   id: String!
   name: String!
-  currentGameId: String
+  currentSessionId: String
   createdAt: AWSDateTime!
 }
 
@@ -488,7 +490,7 @@ input BoardResult {
 
 input UpdateBoardResultInput {
   clubId: String!
-  gameId: String!
+  sessionId: String!
   tableNumber: Int!
   boardResult: BoardResult!
 }
@@ -568,7 +570,7 @@ input PagingTableAssignmentVT {
 
 input UpdateTableAssignmentInput {
   clubId: String!
-  gameId: String!
+  sessionId: String!
   tableAssignment: TableAssignment!
 }
 
@@ -581,7 +583,7 @@ input PartialPlayerAssignment {
 input AssignPlayerInput {
   clubId: String!
   clubDeviceId: String
-  gameId: String!
+  sessionId: String!
   tableNumber: Int!
   directionLetter: DirectionLetter!
   clubHumanId: String!
@@ -591,14 +593,14 @@ input AssignPlayerInput {
 input UnassignPlayersInput {
   clubId: String!
   clubDeviceId: String
-  gameId: String!
+  sessionId: String!
   tableNumber: Int!
 }
 
 type AssignPlayerResponse {
   clubId: String!
   clubDeviceId: String
-  gameId: String!
+  sessionId: String!
   tableNumber: Int!
   directionLetter: DirectionLetter!
   clubHumanId: String!
@@ -608,22 +610,22 @@ type AssignPlayerResponse {
 type UnassignPlayersResponse {
   clubId: String!
   clubDeviceId: String
-  gameId: String!
+  sessionId: String!
   tableNumber: Int!
 }
 
-input GetGameInput {
+input GetSessionInput {
   clubId: String!
-  gameId: String!
+  sessionId: String!
 }
 
-type Game {
+type Session {
   clubId: String!
     @aws_iam
     @aws_cognito_user_pools(
       cognito_groups: ["adminSuper", "rando", "clubDevice"]
     )
-  gameId: String!
+  sessionId: String!
     @aws_iam
     @aws_cognito_user_pools(
       cognito_groups: ["adminSuper", "rando", "clubDevice"]
@@ -687,9 +689,9 @@ input ClubHumanInput {
   displayName: String
 }
 
-input PartialGameCVT {
+input PartialSessionCVT {
   clubId: String!
-  gameId: String!
+  sessionId: String!
   movement: Movement!
   tableCount: Int!
   roundCount: Int!
@@ -699,9 +701,9 @@ input PartialGameCVT {
   createdAt: AWSDateTime!
 }
 
-input PartialGameVT {
+input PartialSessionVT {
   clubId: String!
-  gameId: String!
+  sessionId: String!
   movement: Movement!
   tableCount: Int!
   roundCount: Int!
@@ -711,7 +713,7 @@ input PartialGameVT {
   createdAt: AWSDateTime!
 }
 
-input EnqueueCreateGameInput {
+input EnqueueCreateSessionInput {
   clubId: String!
   movement: Movement!
   tableCount: Int!
@@ -720,9 +722,9 @@ input EnqueueCreateGameInput {
   label: String
 }
 
-type EnqueueCreateGameOutput {
+type EnqueueCreateSessionOutput {
   clubId: String!
-  gameId: String!
+  sessionId: String!
   movement: Movement!
   tableCount: Int!
   roundCount: Int!
@@ -755,9 +757,9 @@ type NotifyClubHuman {
     @aws_iam
 }
 
-input DeleteGameInput {
+input DeleteSessionInput {
   clubId: String!
-  gameId: String!
+  sessionId: String!
 }
 
 input DeleteClubHumanInput {
@@ -794,17 +796,17 @@ type UpdateClubNameResponse {
   newClubName: String!
 }
 
-input UpdateCurrentGameIdInput {
+input UpdateCurrentSessionIdInput {
   clubId: String!
-  newGameId: String
+  newSessionId: String
 }
 
-type UpdateCurrentGameIdResponse {
+type UpdateCurrentSessionIdResponse {
   clubId: String!
-  newCurrentGameId: String
+  newCurrentSessionId: String
 }
 
-type ClearCurrentGameIdResponse {
+type ClearCurrentSessionIdResponse {
   clubId: String!
 }
 
@@ -819,14 +821,14 @@ type DeleteClubAndAdminResponse {
 
 type UpdateTableAssignmentResponse {
   clubId: String!
-  gameId: String!
+  sessionId: String!
   clientId: String!
   tableAssignment: TableAssignmentCVT!
 }
 
 type UpdateBoardResultResponse {
   clubId: String!
-  gameId: String!
+  sessionId: String!
   tableNumber: Int!
   clientId: String!
   boardResult: BoardResultC!

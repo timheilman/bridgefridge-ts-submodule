@@ -1,8 +1,8 @@
-import { MutationUpdateCurrentGameIdArgs } from "../appsync";
+import { MutationUpdateCurrentSessionIdArgs } from "../appsync";
 import { errorForClubLevelMultitenancy, InputValidator } from "./multitenancy";
 
-export const errorForMutationUpdateCurrentGameId: InputValidator<
-  MutationUpdateCurrentGameIdArgs
+export const errorForMutationUpdateCurrentSessionId: InputValidator<
+  MutationUpdateCurrentSessionIdArgs
 > = ({ args, cogIdentity }) =>
   errorForClubLevelMultitenancy({
     cogIdentity,

@@ -1,11 +1,11 @@
 import {
   Query,
   QueryGetClubArgs,
-  QueryGetGameArgs,
+  QueryGetSessionArgs,
   QueryListClubDeviceRegistrationsArgs,
   QueryListClubDevicesArgs,
   QueryListClubHumansArgs,
-  QueryListGamesArgs,
+  QueryListSessionsArgs,
 } from "./appsync";
 
 type GeneratedQuery<InputType, OutputType> = string & {
@@ -37,7 +37,7 @@ export const qidToQueryGql = {
           id
           name
           createdAt
-          currentGameId
+          currentSessionId
         }
       }
     `,
@@ -83,15 +83,18 @@ export const qidToQueryGql = {
     `,
     "listClubDevices",
   ),
-  listGames: createKeyedGeneratedQuery<"listGames", QueryListGamesArgs>(
+  listSessions: createKeyedGeneratedQuery<
+    "listSessions",
+    QueryListSessionsArgs
+  >(
     /* GraphQL */ `
-      query listGames($input: ListGamesInput!) {
-        listGames(input: $input) {
+      query listSessions($input: ListSessionsInput!) {
+        listSessions(input: $input) {
           items {
             boardsPerRound
             clubId
             createdAt
-            gameId
+            sessionId
             label
             movement
             roundCount
@@ -128,7 +131,7 @@ export const qidToQueryGql = {
         }
       }
     `,
-    "listGames",
+    "listSessions",
   ),
   listClubHumans: createKeyedGeneratedQuery<
     "listClubHumans",
@@ -148,14 +151,14 @@ export const qidToQueryGql = {
     `,
     "listClubHumans",
   ),
-  getGame: createKeyedGeneratedQuery<"getGame", QueryGetGameArgs>(
+  getSession: createKeyedGeneratedQuery<"getSession", QueryGetSessionArgs>(
     /* GraphQL */ `
-      query getGame($input: GetGameInput!) {
-        getGame(input: $input) {
+      query getSession($input: GetSessionInput!) {
+        getSession(input: $input) {
           boardsPerRound
           clubId
           createdAt
-          gameId
+          sessionId
           label
           movement
           roundCount
@@ -190,6 +193,6 @@ export const qidToQueryGql = {
         }
       }
     `,
-    "getGame",
+    "getSession",
   ),
 };

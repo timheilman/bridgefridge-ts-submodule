@@ -1,12 +1,12 @@
-import { QueryGetGameArgs } from "../appsync";
+import { QueryGetSessionArgs } from "../appsync";
 import { errorForClubLevelMultitenancy, InputValidator } from "./multitenancy";
 
-export const errorForQueryGetGame: InputValidator<QueryGetGameArgs> = ({
+export const errorForQueryGetSession: InputValidator<QueryGetSessionArgs> = ({
   args,
   cogIdentity,
 }) =>
   errorForClubLevelMultitenancy({
     cogIdentity,
     clubId: args.input.clubId,
-    failureMessage: "Can only get games for one's own club.",
+    failureMessage: "Can only get sessions for one's own club.",
   });

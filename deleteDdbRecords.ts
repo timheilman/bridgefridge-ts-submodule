@@ -6,7 +6,7 @@ import {
   QueryCommandOutput,
 } from "@aws-sdk/lib-dynamodb";
 
-import { clubKey, gameSortKeyPrefix0 } from "./ddbSortkey";
+import { clubKey, sessionSortKeyPrefix0 } from "./ddbSortkey";
 import { tsSubmoduleLogFn } from "./tsSubmoduleLog";
 const log = tsSubmoduleLogFn("deleteDdbRecords.");
 async function queryChunk({
@@ -77,7 +77,7 @@ export const batchQuery = async ({
   return items;
 };
 
-export async function batchDeleteGames({
+export async function batchDeleteSessions({
   ddbClient,
   tableName,
   clubId,
@@ -89,7 +89,7 @@ export async function batchDeleteGames({
   const keyConditionExpression = "pk = :pk and begins_with(sk, :sk)";
   const expressionAttributeValues = {
     ":pk": clubKey(clubId),
-    ":sk": `${gameSortKeyPrefix0}#`,
+    ":sk": `${sessionSortKeyPrefix0}#`,
   };
   const items = await batchQuery({
     ddbClient,
@@ -97,7 +97,7 @@ export async function batchDeleteGames({
     keyConditionExpression,
     expressionAttributeValues,
   });
-  log("batchDeleteGames", "debug", { items, clubId });
+  log("batchDeleteSessions", "debug", { items, clubId });
   await batchDeleteDdbRecords({
     items,
     ddbClient,
