@@ -14,13 +14,7 @@ export const errorForMutationEnqueueCreateClubHuman: InputValidator<
   }
   const { clubId, clubHumanId, displayName } = args.input;
 
-  if (
-    !clubId ||
-    (clubHumanId !== null &&
-      clubHumanId !== undefined &&
-      clubHumanId.trim() === "") ||
-    displayName.trim() === ""
-  ) {
+  if (!clubId || clubHumanId?.trim() === "" || displayName.trim() === "") {
     return {
       msg: "Invalid clubHuman parameters: clubId is required, and clubHumanId and displayName are optional but if present, must not be empty or whitespace",
       errorType: "400: Invalid clubHuman parameters",

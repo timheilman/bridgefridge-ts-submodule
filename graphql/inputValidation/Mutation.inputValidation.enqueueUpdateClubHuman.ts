@@ -17,12 +17,8 @@ export const errorForMutationEnqueueUpdateClubHuman: InputValidator<
   if (
     !clubId ||
     !humanId ||
-    (clubHumanId !== null &&
-      clubHumanId !== undefined &&
-      clubHumanId.trim() === "") ||
-    (displayName !== null &&
-      displayName !== undefined &&
-      displayName.trim() === "")
+    clubHumanId?.trim() === "" ||
+    displayName?.trim() === ""
   ) {
     return {
       msg: "Invalid clubHuman parameters: clubId and humanId are required, and clubHumanId and displayName are optional but if present, must not be empty or whitespace",
