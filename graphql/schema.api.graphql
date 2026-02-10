@@ -759,9 +759,15 @@ input NotifyClubHumanInput {
 }
 
 type NotifyClubHuman {
-  error: String @aws_cognito_user_pools(cognito_groups: ["adminSuper"]) @aws_iam
+  error: String
+    @aws_cognito_user_pools(
+      cognito_groups: ["adminSuper", "clubDevice", "rando"]
+    )
+    @aws_iam
   clubHuman: ClubHuman
-    @aws_cognito_user_pools(cognito_groups: ["adminSuper"])
+    @aws_cognito_user_pools(
+      cognito_groups: ["adminSuper", "clubDevice", "rando"]
+    )
     @aws_iam
 }
 
