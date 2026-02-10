@@ -669,16 +669,24 @@ type Session {
 
 type ClubHuman {
   clubId: String!
-    @aws_cognito_user_pools(cognito_groups: ["rando", "adminSuper"])
+    @aws_cognito_user_pools(
+      cognito_groups: ["adminSuper", "clubDevice", "rando"]
+    )
     @aws_iam
   humanId: String!
-    @aws_cognito_user_pools(cognito_groups: ["rando", "adminSuper"])
+    @aws_cognito_user_pools(
+      cognito_groups: ["adminSuper", "clubDevice", "rando"]
+    )
     @aws_iam
   clubHumanId: String!
-    @aws_cognito_user_pools(cognito_groups: ["rando", "adminSuper"])
+    @aws_cognito_user_pools(
+      cognito_groups: ["adminSuper", "clubDevice", "rando"]
+    )
     @aws_iam
   displayName: String
-    @aws_cognito_user_pools(cognito_groups: ["rando", "adminSuper"])
+    @aws_cognito_user_pools(
+      cognito_groups: ["adminSuper", "clubDevice", "rando"]
+    )
     @aws_iam
 }
 
