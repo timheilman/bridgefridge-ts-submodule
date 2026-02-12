@@ -18,6 +18,18 @@ export const clubKeys = (clubId: string) => ({
   pk: clubKey(clubId),
   sk: clubKey(clubId),
 });
+const clubDeviceSortKey = (clubDeviceId: string) =>
+  `${clubDeviceSortKeyPrefix0}#${clubDeviceId}`;
+export const clubDeviceKeys = ({
+  clubId,
+  clubDeviceId,
+}: {
+  clubId: string;
+  clubDeviceId: string;
+}) => ({
+  pk: clubKey(clubId),
+  sk: clubDeviceSortKey(clubDeviceId),
+});
 export const clubIdFromKey = (clubKey: string) => {
   if (!clubKey.startsWith(clubSortKeyPrefix0)) {
     return {
