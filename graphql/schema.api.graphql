@@ -175,15 +175,21 @@ type Mutation {
 type Subscription {
   onDeleteSession(clubId: String!): Session
     @aws_subscribe(mutations: ["deleteSession"])
-    @aws_cognito_user_pools(cognito_groups: ["adminSuper", "clubDevice"])
+    @aws_cognito_user_pools(
+      cognito_groups: ["adminSuper", "rando", "clubDevice"]
+    )
   onUpdateCurrentSessionId(clubId: String!): UpdateCurrentSessionIdResponse
     @aws_subscribe(mutations: ["updateCurrentSessionId"])
-    @aws_cognito_user_pools(cognito_groups: ["adminSuper", "clubDevice"])
+    @aws_cognito_user_pools(
+      cognito_groups: ["adminSuper", "rando", "clubDevice"]
+    )
 
   # This is for personalDevice-to-clubDevice communication to update the club's name
   onUpdateClubName(clubId: String!): UpdateClubNameResponse
     @aws_subscribe(mutations: ["updateClubName"])
-    @aws_cognito_user_pools(cognito_groups: ["adminSuper", "clubDevice"])
+    @aws_cognito_user_pools(
+      cognito_groups: ["adminSuper", "rando", "clubDevice"]
+    )
 
   # This is for for clubDevice-to-clubDevice communication to know player names for display
   # after round 1
@@ -222,7 +228,9 @@ type Subscription {
     )
   onDeleteClubHuman(clubId: String!): ClubHuman
     @aws_subscribe(mutations: ["deleteClubHuman"])
-    @aws_cognito_user_pools(cognito_groups: ["adminSuper", "clubDevice"])
+    @aws_cognito_user_pools(
+      cognito_groups: ["adminSuper", "rando", "clubDevice"]
+    )
 
   onNotifyCreateClubDevice(clubId: String!): ClubDeviceWithRegToken
     @aws_subscribe(mutations: ["notifyCreateClubDevice"])
