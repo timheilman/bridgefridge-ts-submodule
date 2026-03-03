@@ -10,7 +10,7 @@
       - [Club Device Mode](#club-device-mode)
     - [bridgefridge-cloud](#bridgefridge-cloud)
   - [Identities and Environments](#identities-and-environments)
-    - [Services, AWS subaccounts, and Stages/Environments](#services-aws-subaccounts-and-stagesenvironments)
+    - [AWS Subaccounts and Stages/Environments](#aws-subaccounts-and-stagesenvironments)
     - [AWS IAM Identity Center, SSO, and the CLI](#aws-iam-identity-center-sso-and-the-cli)
     - [Expected env vars for your CLI](#expected-env-vars-for-your-cli)
     - [bridgefridge-cloud and bridgefridge-device webapp deployments](#bridgefridge-cloud-and-bridgefridge-device-webapp-deployments)
@@ -58,9 +58,9 @@ The [cloud backend](https://github.com/timheilman/bridgefridge-cloud) is built a
 
 Two separate systems are used for identity management in this project. For the identities of developers on the project, we use the AWS IAM Identity Center. (For the identities of club admins and their club devices, we use AWS Cognito; see bridgefridge-cloud for more information.) Although this part regarding developer identities is a bear, it is the best practice currently recommended for AWS CDK projects.
 
-#### Services, AWS subaccounts, and Stages/Environments
+#### AWS Subaccounts and Stages/Environments
 
-Each "stage" or "environment" (these terms are synonymous) of bridgefridge-device and bridgefridge-cloud are hosted under differing AWS subaccounts of a root AWS account. (These AWS subaccounts can host multiple environments, but each environment is only within a single AWS subaccount.)
+Each "stage" or "environment" (these terms are synonymous) of bridgefridge-device (delivered as a webapp) and bridgefridge-cloud are hosted under differing AWS subaccounts of a root AWS account. (These AWS subaccounts can host multiple environments, but each environment is only within a single AWS subaccount.)
 
 All this is done to provide isolation between environments. For example, the production environment for both bridgefridge-device as a webapp and bridgefridge-cloud is hosted under the prod subaccount; each developer's environment is hosted under the dev subaccount.
 
