@@ -2,7 +2,7 @@
 
 - [BridgeFridge](#bridgefridge)
   - [Background](#background)
-  - [The Four Code Repositories](#the-four-code-repositories)
+  - [The Three Code Repositories](#the-three-code-repositories)
     - [bridgefridge-ts-submodule](#bridgefridge-ts-submodule)
     - [bridgefridge-device](#bridgefridge-device)
       - [Web App](#web-app)
