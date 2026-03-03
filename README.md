@@ -24,9 +24,9 @@
 
 In Portland, Oregon, USA there is a [duplicate bridge](https://en.wikipedia.org/wiki/Duplicate_bridge) [club](https://www.facebook.com/groups/394839073989383) run by a guy named Zack. It is not sanctioned by the [ACBL](https://acbl.org/) and Zack charges no dues – it's purely social and for-fun. I (Tim aka tdh) am a club member. Different club members take turns hosting the game at their homes.
 
-Presently we use Google sheets and extensive macros that Zack has written in them to score the games. However, it is awkward and error-prone using Google Sheets to enter player identities and scores so I undertook this project to make things easier and less error-prone.
+Previously we used Google sheets and extensive macros that Zack had written in them to score the games. However, it was awkward and error-prone using Google Sheets to enter player identities and scores so I undertook this project to make things easier and less error-prone. We have been using BridgeFridge successfully to score our games since around May of 2024.
 
-### The Four Code Repositories
+### The Three Code Repositories
 
 The project is in three parts:
 
@@ -60,35 +60,35 @@ Two separate systems are used for identity management in this project. For the i
 
 #### Services, AWS subaccounts, and Stages/Environments
 
-In the serverless NPM framework, each "stage" or "environment" (these terms are synonymous) of bridgefridge-device and bridgefridge-cloud are hosted under differing AWS subaccounts of a root AWS account. (These AWS subaccounts can host multiple environments, but each environment is only within a single AWS subaccount.)
+Each "stage" or "environment" (these terms are synonymous) of bridgefridge-device and bridgefridge-cloud are hosted under differing AWS subaccounts of a root AWS account. (These AWS subaccounts can host multiple environments, but each environment is only within a single AWS subaccount.)
 
-All this is done to provide isolation between environments. For example, the production environment for both bridgefridge-device as a webapp and bridgefridge-cloud is hosted under one AWS account; the development environment is hosted under another.
+All this is done to provide isolation between environments. For example, the production environment for both bridgefridge-device as a webapp and bridgefridge-cloud is hosted under the prod subaccount; each developer's environment is hosted under the dev subaccount.
 
 Each AWS subaccount is administered beneath a root AWS account, using AWS Organizations.
 
 #### AWS IAM Identity Center, SSO, and the CLI
 
-The AWS IAM Identity Center (previously known as AWS Single-Sign-On and still called `aws sso` on the AWS CLI) instance is associated with the root account of the project. The root account/subaccount relationship is managed in AWS Organizations. Permission sets provide differential access for those AWS IAM Identity Center accounts to each of the AWS subaccounts beneath the root account, associated with each NPM serverless framework service.
+The AWS IAM Identity Center (previously known as AWS Single-Sign-On and still called `aws sso` on the AWS CLI) instance is associated with the root account of the project. The root account/subaccount relationship is managed in AWS Organizations. Permission sets provide differential access for those AWS IAM Identity Center accounts to each of the AWS subaccounts beneath the root account.
 
-Each developer on the project will need an account in AWS IAM Identity Center. This is not the same as an IAM account. Instead, AWS IAM Identity Center acts as the Identity Provider (IdP) for IAM. As such, there is an [SSO signin URL for the bridgefridge Identity Center](https://d-92674207af.awsapps.com/start) that is separate from the general AWS signin page for AWS IAM (NOT-IdentityCenter) accounts. (If you fork this project to run your own instance of this project, you will need to create your own AWS IAM Identity Center instance and signin URL.)
+Each developer on the project needs an account in AWS IAM Identity Center. This is not the same as an IAM account. Instead, AWS IAM Identity Center acts as the Identity Provider (IdP) for IAM. As such, there is an [SSO signin URL for the bridgefridge Identity Center](https://d-92674207af.awsapps.com/start) that is separate from the general AWS signin page for AWS IAM (NOT-IdentityCenter) accounts.
 
-Your AWS Identity Center account is the one that you use to [configure the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) for build, deployment, and testing of bridgefridge-webapp and bridgefridge-cloud. Once you have a profile in the AWS CLI configuration file for a particular env and permission set (using `aws configure sso`), you will need to update it with an extra line. Proceeding from here by example is probably clearest. The extra line begins with `credential_process` in the following example `~/.aws/config` file:
+Your AWS Identity Center account is the one that you use to [configure the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) for build, deployment, and testing of bridgefridge-device and bridgefridge-cloud. Once you have a profile in the AWS CLI configuration file for a particular env and permission set (using `aws configure sso`), you will need to update it with an extra line. Proceeding from here by example is probably clearest. The extra line begins with `credential_process` in the following example `~/.aws/config` file:
 
 ```
-[profile BridgeFridge-sbc00-tdh-PowerUser-profile]
+[profile BridgeFridge-dev-tdh-PowerUser-profile]
 sso_session = BridgeFridge-sbc00-tdh-PowerUser-session
 sso_account_id = 437893194722
 sso_role_name = PowerUserAccess
 region = us-west-2
 output = json
-credential_process = aws configure export-credentials --profile BridgeFridge-sbc00-tdh-PowerUser-profile
-[sso-session BridgeFridge-sbc00-tdh-PowerUser-session]
+credential_process = aws configure export-credentials --profile BridgeFridge-dev-tdh-PowerUser-profile
+[sso-session BridgeFridge-dev-tdh-PowerUser-session]
 sso_start_url = https://d-92674207af.awsapps.com/start
 sso_region = us-west-2
 sso_registration_scopes = sso:account:access
 ```
 
-In this example profile and session, `sbc00` corresponds to the NPM serverless framework service name. It is kept short because AWS lambdas deployed by the NPM serverless framework are automatically named using both the NPM serverless framework service name _and_ the environment name, since a single NPM serverless framework service (and thus, AWS subaccount) can host multiple environments. `PowerUser` corresponds to the AWS IAM Identity Center permissions set. `437893194722` is the AWS account number of the AWS subaccount, corresponding to the NPM serverless service `sbc00`, that hosts the `dev` and `tmpenv` environments. `https://d-92674207af.awsapps.com/start` is the SSO start URL provided by bridgefridge's root account AWS IAM Identity Center instance. `us-west-2` is the AWS region in which the environments are hosted. `tdh` refers to my own AWS IAM Identity Center account.
+In this example profile and session, `dev` corresponds to the subaccount, and `tdh` corresponds to my own AWS IAM Identity Center account. Since each developer gets their own environment in the `dev` subaccount, `tdh` also refers to my environment. `PowerUser` corresponds to the AWS IAM Identity Center permissions set. `437893194722` is the AWS account number of the dev AWS subaccount that hosts the `tdh` environment. `https://d-92674207af.awsapps.com/start` is the SSO start URL provided by bridgefridge's root account AWS IAM Identity Center instance. `us-west-2` is the AWS region in which the environments are hosted.
 
 #### Expected env vars for your CLI
 
@@ -103,31 +103,38 @@ export BF_AWS_CLI_PROFILE_STAGING=BridgeFridge-staging-tdh-PowerUser-profile
 export BF_AWS_CLI_PROFILE_PROD=BridgeFridge-prod-tdh-PowerUser-profile
 ```
 
-This tells the build and test code in bridgefridge-cloud and bridgefridge-device which AWS SSO profile to use for the build, deploy, and test. Switching which AWS subaccount you are pointed at is done by switching this env var to a different AWS SSO profile (TODO: [SCOR-588](https://theilman.atlassian.net/browse/SCOR-588) there is a plan to redo this). Within that service/account which env you are pointed at is done by setting the `STAGE` env var to the name of that env. See the `package.json` file in bridgefridge-cloud for more information.
+This tells the build and test code in bridgefridge-cloud and bridgefridge-device which AWS SSO profile to use for the build, deploy, and test.
+
+There are separate npm scripts for deployment of bridgefridge-cloud to an environment (specified with `STAGE`) in the `dev` subaccount, and for deployment of bridgefridge-cloud to the prod environment, wherein `STAGE` is overridden to `prod` regardless of the value of that env var in your shell.
+
+For bridgefridge-device, Amplify Frontend Hosting CI in the `tdh` environment is set up to watch the branch named `tdh` and deploy it to `https://tdh.dev.bridgefridge.com` and similarly for other environments in the `dev` subaccount. Similarly, Amplify Frontend Hosting CI in the `prod` subaccount and environment watches the branch named `prod` to deploy to production at `https://www.bridgefridge.com`.
+
+See the `package.json` file in bridgefridge-cloud for more information.
 
 #### bridgefridge-cloud and bridgefridge-device webapp deployments
 
-Once things are set up, a typical deployment and test of bridgefridge-cloud and bridgefridge-device in the dev environment will look like this:
+Once things are set up, a typical deployment and test of bridgefridge-cloud and bridgefridge-device in the `tdh` environment will look like this:
 
 ```
-bridgefridge-cloud% npm run deploy
+bridgefridge-cloud% npm run deployNonprod
 bridgefridge-cloud% npm run test
 bridgefridge-cloud% cd ../bridgefridge-device
-bridgefridge-device% npm start
-```
-
-And in a separate terminal:
-
-```
 bridgefridge-device% npm test
+```
+
+The cloud deploy will cause an amplify fe ci deployment of the `tdh` branch in bridgefridge-device as it exists in github. Once that is complete, these are the webapp tests:
+
+```
 bridgefridge-device% npm run cypress:run
 ```
 
-Then, to run the app:
+To run the app on an android or iOS device or emulator:
 
-- On android or iOS, launch a development build of the app and point it at the dev server started via npm start.
+```
+bridgefridge-device% npm start
+```
 
-The app should launch and run.
+then launch a development build of the app and point it at the dev server. `npm start` provides a QR code that can be scanned by the development build of the app to make this easy.
 
 ### This submodule should be an NPM package
 
