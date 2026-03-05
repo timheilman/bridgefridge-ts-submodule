@@ -756,8 +756,8 @@ input EnqueueCreateClubHumanInput {
 
 type EnqueueCreateClubHumanOutput {
   clubId: String!
-  clubHumanId: String!
   humanId: String!
+  clubHumanId: String!
   displayName: String!
 }
 
@@ -786,7 +786,7 @@ input DeleteSessionInput {
 
 input DeleteClubHumanInput {
   clubId: String!
-  humanId: String!
+  clubHumanId: String!
 }
 
 input EnqueueUpdateClubHumanInput {
