@@ -696,7 +696,7 @@ type ClubHuman {
       cognito_groups: ["adminSuper", "clubDevice", "rando"]
     )
     @aws_iam
-  role: String
+  role: String!
     @aws_cognito_user_pools(
       cognito_groups: ["adminSuper", "clubDevice", "rando"]
     )
