@@ -404,11 +404,13 @@ export interface MutationUpdateTableAssignmentArgs {
 export interface NotifyClubHuman {
   __typename?: "NotifyClubHuman";
   clubHuman?: Maybe<ClubHuman>;
+  clubId?: Maybe<Scalars["String"]["output"]>;
   error?: Maybe<Scalars["String"]["output"]>;
 }
 
 export interface NotifyClubHumanInput {
   clubHuman?: InputMaybe<ClubHumanInput>;
+  clubId?: InputMaybe<Scalars["String"]["input"]>;
   error?: InputMaybe<Scalars["String"]["input"]>;
 }
 
