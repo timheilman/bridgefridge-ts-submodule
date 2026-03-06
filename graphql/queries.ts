@@ -144,6 +144,7 @@ export const qidToQueryGql = {
             clubId
             clubHumanId
             displayName
+            role
           }
           nextToken
         }

@@ -252,6 +252,7 @@ export const subIdToSubGql = {
             displayName
             clubHumanId
             humanId
+            role
           }
         }
       }
@@ -271,6 +272,7 @@ export const subIdToSubGql = {
             displayName
             clubHumanId
             humanId
+            role
           }
         }
       }
@@ -288,6 +290,7 @@ export const subIdToSubGql = {
           clubHumanId
           displayName
           humanId
+          role
         }
       }
     `,
