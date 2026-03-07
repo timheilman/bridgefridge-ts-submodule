@@ -1,3 +1,5 @@
+import { BridgeFridgeJwtClaimTarget } from "../appsync";
+
 export interface GqlUtilErrorParams {
   msg: string;
   errorType?: string;
@@ -8,42 +10,37 @@ export interface GqlUtilErrorParams {
 }
 
 // these claim target roles are for those under cognito group "rando":
-export const allBridgeFridgeClaimTargets = [
-  "ownerClub",
-  "adminClub",
-  "memberClub",
-] as const;
+export const allBridgeFridgeJwtClaimTargets: readonly BridgeFridgeJwtClaimTarget[] =
+  ["ownerClub", "adminClub", "memberClub"] as const;
 // adminSuper and clubDevice are managed only with cognito groups, not BridgeFridgeClaims:
 export const allBridgeFridgeRoles = [
-  ...allBridgeFridgeClaimTargets,
+  ...allBridgeFridgeJwtClaimTargets,
   "adminSuper",
   "clubDevice",
 ] as const;
 export type BridgeFridgeRole = (typeof allBridgeFridgeRoles)[number];
-export type BridgeFridgeClaimTarget =
-  (typeof allBridgeFridgeClaimTargets)[number];
 export const bridgeFridgeRoleForString = (bridgeFridgeRole: string) => {
   if (!allBridgeFridgeRoles.includes(bridgeFridgeRole as BridgeFridgeRole)) {
     throw new Error(`Invalid bridgeFridgeRole: ${bridgeFridgeRole}`);
   }
   return bridgeFridgeRole as BridgeFridgeRole;
 };
-export const bridgeFridgeClaimTargetForString = (
-  bridgeFridgeClaimTarget: string,
+export const bridgeFridgeJwtClaimTargetForString = (
+  bridgeFridgeJwtClaimTarget: string,
 ) => {
   if (
-    !allBridgeFridgeClaimTargets.includes(
-      bridgeFridgeClaimTarget as BridgeFridgeClaimTarget,
+    !allBridgeFridgeJwtClaimTargets.includes(
+      bridgeFridgeJwtClaimTarget as BridgeFridgeJwtClaimTarget,
     )
   ) {
     throw new Error(
-      `Invalid bridgeFridgeClaimTarget: ${bridgeFridgeClaimTarget}`,
+      `Invalid bridgeFridgeClaimTarget: ${bridgeFridgeJwtClaimTarget}`,
     );
   }
-  return bridgeFridgeClaimTarget as BridgeFridgeClaimTarget;
+  return bridgeFridgeJwtClaimTarget as BridgeFridgeJwtClaimTarget;
 };
 // key is clubId:
-export type BridgeFridgeClaims = Record<string, BridgeFridgeClaimTarget>;
+export type BridgeFridgeClaims = Record<string, BridgeFridgeJwtClaimTarget>;
 
 export type PotentialCogIdentity =
   | {
