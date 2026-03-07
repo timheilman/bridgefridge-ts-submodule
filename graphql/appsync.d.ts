@@ -146,7 +146,7 @@ export interface ClubHuman {
   clubId: Scalars["String"]["output"];
   displayName?: Maybe<Scalars["String"]["output"]>;
   humanId: Scalars["String"]["output"];
-  role: Scalars["String"]["output"];
+  role: Role;
 }
 
 export interface ClubHumanInput {
@@ -154,7 +154,7 @@ export interface ClubHumanInput {
   clubId: Scalars["String"]["input"];
   displayName?: InputMaybe<Scalars["String"]["input"]>;
   humanId: Scalars["String"]["input"];
-  role: Scalars["String"]["input"];
+  role: Role;
 }
 
 export interface CreateClubDeviceRegistrationInput {
@@ -551,6 +551,8 @@ export type Rank =
   | "TEN"
   | "THREE"
   | "TWO";
+
+export type Role = "adminClub" | "memberClub" | "ownerClub";
 
 export interface Session {
   __typename?: "Session";

@@ -60,6 +60,12 @@ enum Movement {
   RAINBOW
 }
 
+enum Role {
+  memberClub
+  adminClub
+  ownerClub
+}
+
 type Query {
   getClub(clubId: String!): Club
     @aws_cognito_user_pools(
@@ -696,7 +702,7 @@ type ClubHuman {
       cognito_groups: ["adminSuper", "clubDevice", "rando"]
     )
     @aws_iam
-  role: String!
+  role: Role!
     @aws_cognito_user_pools(
       cognito_groups: ["adminSuper", "clubDevice", "rando"]
     )
@@ -708,7 +714,7 @@ input ClubHumanInput {
   humanId: String!
   clubHumanId: String!
   displayName: String
-  role: String!
+  role: Role!
 }
 
 input PartialSessionCVT {
