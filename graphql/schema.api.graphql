@@ -60,7 +60,7 @@ enum Movement {
   RAINBOW
 }
 
-enum Role {
+enum BridgeFridgeJwtClaimTarget {
   memberClub
   adminClub
   ownerClub
@@ -702,7 +702,7 @@ type ClubHuman {
       cognito_groups: ["adminSuper", "clubDevice", "rando"]
     )
     @aws_iam
-  role: Role!
+  role: BridgeFridgeJwtClaimTarget!
     @aws_cognito_user_pools(
       cognito_groups: ["adminSuper", "clubDevice", "rando"]
     )
@@ -714,7 +714,7 @@ input ClubHumanInput {
   humanId: String!
   clubHumanId: String!
   displayName: String
-  role: Role!
+  role: BridgeFridgeJwtClaimTarget!
 }
 
 input PartialSessionCVT {

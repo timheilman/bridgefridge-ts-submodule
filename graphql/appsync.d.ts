@@ -89,6 +89,11 @@ export interface BoardResultC {
 
 export type BoardResultType = "NOT_BID_NOT_PLAYED" | "PASSED_OUT" | "PLAYED";
 
+export type BridgeFridgeJwtClaimTarget =
+  | "adminClub"
+  | "memberClub"
+  | "ownerClub";
+
 export interface ClearCurrentSessionIdResponse {
   __typename?: "ClearCurrentSessionIdResponse";
   clubId: Scalars["String"]["output"];
@@ -146,7 +151,7 @@ export interface ClubHuman {
   clubId: Scalars["String"]["output"];
   displayName?: Maybe<Scalars["String"]["output"]>;
   humanId: Scalars["String"]["output"];
-  role: Role;
+  role: BridgeFridgeJwtClaimTarget;
 }
 
 export interface ClubHumanInput {
@@ -154,7 +159,7 @@ export interface ClubHumanInput {
   clubId: Scalars["String"]["input"];
   displayName?: InputMaybe<Scalars["String"]["input"]>;
   humanId: Scalars["String"]["input"];
-  role: Role;
+  role: BridgeFridgeJwtClaimTarget;
 }
 
 export interface CreateClubDeviceRegistrationInput {
@@ -551,8 +556,6 @@ export type Rank =
   | "TEN"
   | "THREE"
   | "TWO";
-
-export type Role = "adminClub" | "memberClub" | "ownerClub";
 
 export interface Session {
   __typename?: "Session";
