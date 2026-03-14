@@ -1,5 +1,6 @@
 import {
   AdminGetUserCommand,
+  AdminGetUserCommandOutput,
   CognitoIdentityProviderClient,
   UserNotFoundException,
 } from "@aws-sdk/client-cognito-identity-provider";
@@ -29,4 +30,12 @@ export const nullableCognitoUser = async (params: CognitoUserParams) => {
     }
     throw e;
   }
+};
+export const truthyUsername = (
+  adminGetUserCommandOutput: AdminGetUserCommandOutput,
+) => {
+  if (!adminGetUserCommandOutput.Username) {
+    throw new Error("adminGetUserCommandOutput.Username is falsy");
+  }
+  return adminGetUserCommandOutput.Username;
 };
