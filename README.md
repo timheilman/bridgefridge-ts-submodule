@@ -18,6 +18,10 @@
 
 <!-- TOC end -->
 
+# ARCHIVED
+
+This repository has been archived because timheilman/bridgefridge-device was converted to a monorepo and incorporated this repo as a package therein.
+
 ## BridgeFridge
 
 ### Background
